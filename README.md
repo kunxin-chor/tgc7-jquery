@@ -63,3 +63,95 @@ newTask.find('button').click(function(){
 
 $('#task-list').append(newTask);
 ```        
+
+# JavaScript Binding
+The `this` variable is contextual.
+In a function call, it will refer to **whichever object calls the function**.
+For simplicty sake, when used in the callback function given in `addEventListener` or `$(...).click`, the `this` will refer to
+the HTML element that causes the event.
+
+```
+$(function(){
+    $('#load-btn').click(function(){
+         console.log(this);
+        axios.get('data.json').then(function(response){
+            console.log(response.data);
+            // vanila js: this.disabled = true;
+            console.log(this);
+               $(this).attr('disabled', true);
+        })
+    })
+})
+```
+In the code above, the `this` inside the promise for axios
+is not the same as the `this` in the function for the `click`.
+That is because axios is the one that calls its promise function,
+so the `this` will be referring to `axios` (or something else), not
+the button to
+
+## Solving the binding problem
+
+1. Do not rely on `this` for the promise. Use our own variable.
+Cache the `self` variable in our own variable method.
+```
+$(function(){
+    $('#load-btn').click(function(){
+        // store what ever this is referring to inside a variable
+        let self = this;
+        axios.get('data.json').then(function(response){
+            console.log(response.data);
+            // vanila js: self.disabled = true;
+               $(self).attr('disabled', true);
+        })
+    })
+})
+```
+
+2. Use arrow functions so that `this` will always refer to the `this`
+that the function was written in
+```
+        $('#load-btn').click(function(){
+        // the promise for axios is an arrow function,
+        // so that the this inside it will be the same
+        // as the this outside of it
+        console.log(this);
+        axios.get('data.json').then((response)=>{
+            console.log(this);
+            console.log(response.data);
+            // vanila js: this.disabled = true;
+               $(this).attr('disabled', true);
+        })
+    })
+```
+
+3. Using the `bind` function to set the context
+
+# Extracting out values from form inputs
+
+## Textfields and text areas
+Use the `val` function on the elements after your select them with jQuery
+```
+let productName = $('#product-name').val();
+let productDesc = $('#product-description').val();
+console.log("Product name=", productName);
+console.log("Product description=", productDesc);
+```
+
+## Radio Buttons
+```
+let productType = $(".product-type:checked").val();
+```
+
+## Checkboxes
+```
+let allProperties = [];
+let productProperties = $(".product-properties:checked");
+productProperties.each(function(index, property){
+    allProperties.push(property.value)
+})
+  ```
+
+## Select
+```
+let productMarket = $("#market").val();
+```
