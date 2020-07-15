@@ -5,7 +5,7 @@ $(function(){
         // with the id of `name-input`
         let name = $('#name-input').val();
 
-        alert(`Hello ${name}`);
+        alert(`Hello ${name}!`);
 
     })
 })
