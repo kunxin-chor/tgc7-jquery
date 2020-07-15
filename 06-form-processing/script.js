@@ -19,7 +19,7 @@ $(function(){
         console.log("Product name=", productName);
         console.log("Product description=", productDesc);
         console.log("Product type=", productType)
-        console.log("Product properties=", allProperties.join(','))
+        console.log("Product properties=", allProperties.join('*'))
         console.log("Product market=", productMarket)
     })
 })
